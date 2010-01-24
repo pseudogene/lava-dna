@@ -1,0 +1,7 @@
+<option_set>
+  <sequence_file>virus_sequence.fasta</sequence_file>
+  <database_file>search_me.fasta</database_file>
+  <database_file>search_me_too.fasta</database_file>
+  <word_size>7</word_size>
+  <output_file>answer.out</output_file>
+</option_set>

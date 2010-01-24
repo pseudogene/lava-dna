@@ -1,0 +1,41 @@
+<option_set>
+
+  <slava_alignment_fasta>large_consensus.fasta</slava_alignment_fasta>
+  <slava_output_file>large_results.fasta</slava_output_file>
+  <slava_segment_max_length>5000</slava_segment_max_length>
+  <slava_segment_overlap_length>400</slava_segment_overlap_length>
+  <slava_temp_file_path>slava_temp</slava_temp_file_path>
+
+  <!-- This is a set of "normal" parameters for LAVA -->
+  <signature_max_length>400</signature_max_length>
+  <loop_min_gap>20</loop_min_gap>
+  <max_poly_bases>5</max_poly_bases>
+
+  <outer_primer_target_length>20</outer_primer_target_length>
+  <outer_primer_min_length>17</outer_primer_min_length>
+  <outer_primer_max_length>24</outer_primer_max_length>
+  <outer_primer_target_tm>60.0</outer_primer_target_tm>
+  <outer_primer_min_tm>58.0</outer_primer_min_tm>
+  <outer_primer_max_tm>62.0</outer_primer_max_tm>
+
+  <middle_primer_target_length>20</middle_primer_target_length>
+  <middle_primer_min_length>17</middle_primer_min_length>
+  <middle_primer_max_length>24</middle_primer_max_length>
+  <middle_primer_target_tm>60.0</middle_primer_target_tm>
+  <middle_primer_min_tm>58.0</middle_primer_min_tm>
+  <middle_primer_max_tm>62.0</middle_primer_max_tm>
+
+  <inner_primer_target_length>23</inner_primer_target_length>
+  <inner_primer_min_length>18</inner_primer_min_length>
+  <inner_primer_max_length>28</inner_primer_max_length>
+  <inner_primer_target_tm>64.0</inner_primer_target_tm>
+  <inner_primer_min_tm>61.0</inner_primer_min_tm>
+  <inner_primer_max_tm>66.0</inner_primer_max_tm>
+
+  <loop_primer_target_length>20</loop_primer_target_length>
+  <loop_primer_min_length>17</loop_primer_min_length>
+  <loop_primer_max_length>24</loop_primer_max_length>
+  <loop_primer_target_tm>60.0</loop_primer_target_tm>
+  <loop_primer_min_tm>57.0</loop_primer_min_tm>
+  <loop_primer_max_tm>63.0</loop_primer_max_tm>
+</option_set>

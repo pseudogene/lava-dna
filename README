@@ -1,0 +1,78 @@
+LAVA release 0.1
+
+
+INTRODUCTION
+------------
+
+LAVA (LAMP Assay Versatile Analysis) is an extendable open-source Loop-mediated 
+isothermal AMPlification (LAMP).  LAVA identifies combinations of six primer 
+regions for basic LAMP signatures, or combinations of eight primer regions for 
+LAMP signatures with loop primers, which can be used as LAMP signatures.  The 
+identified primers are conserved among target organism sequences.  Primer 
+combinations are optimized based on lengths, melting temperatures, and spacing 
+among primer sites.
+
+This is a Multiple-Sequence Alignment (MSA) approach to LAMP signature design.  
+Either a single sequence or a pre-computed MSA can be used as input.  The 
+individual sequences from the MSA are used for primer enumeration, with the goal 
+of identifying as many locations for primers as possible.  Design parameters can 
+be adjusted for each primer role.  Once primers have been identified that are 
+shared among all the individual sequences, they are combined into potential 
+inner primer pairs.  Finally, combinations of primers for the remaining roles of 
+loop, middle, and outer, are analyzed to select LAMP signature candidates. 
+
+The script slava.pl is also included as a demonstration of scaling to larger
+genome sizes, but with this kind of implementation, the processing requirements
+scale with the sequence size.  It's realistic to expect that a bacteria-sized
+genome will take hours to days to execute, depending on the computing resources 
+available.
+
+SYSTEM REQUIREMENTS
+-------------------
+
+This is a Unix/Linux-only source code release.  It is not unreasonable to assume 
+that the source code can be installed and run on other system types, with a 
+minimal amount of effort spent porting, especially since it is primarily 
+implemented in Perl.
+
+Perl library XML::LibXML (available at http://www.cpan.org/)
+	XML::LibXML is used for some of Options.pm's persistance capabilities
+
+BioPerl 1.5.2 (available at http://www.bioperl.org/)
+	BioPerl's fundamental utilities and file IO are used heavily
+	
+Primer3 1.0 (available at http://primer3.sourceforge.net/)
+	Primer-selection code
+
+Bio::Perl::Run (also available at http://www.bioperl.org/ as "bioperl-run")
+	Bio::Perl::Run::Primer3 is used to execute system-level calls of Primer3
+
+
+INSTALLATION INSTRUCTIONS
+-------------------------
+
+There are two components to this program, the script lava.pl, and the Perl 
+modules that the script relies on.  Installation of the modules can be 
+performed by entering the top-level directory of the distribution and running:
+
+$ perl Makefile.PL
+$ make
+$ make test
+$ make install
+
+After the Perl modules are installed, the script lava.pl can be run from 
+anywhere that the installed Perl modules are in the @INC path.
+
+
+ACKNOWLEDGEMENTS
+----------------	
+
+This work was supported by a NIBIB Point-of-Care Technologies Research Network 
+Center grant (Gerald J. Kost, PI of the UC Davis / LLNL POCT Center, 
+NIH U54 EB007959). The content is solely the responsibility of the authors and 
+does not necessarily represent the official views of the National Institute of 
+Biomedical Imaging and Bioengineering or the National Institutes of Health.
+
+This work performed under the auspices of the U.S. Department of Energy by 
+Lawrence Livermore National Laboratory under Contract DE-AC52-07NA27344.
+
