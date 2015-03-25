@@ -1,0 +1,3 @@
+This is an extendable Loop-mediated isothermal AMPlification (LAMP) signature design program called LAVA (LAMP Assay Versatile Analysis).  LAVA identifies combinations of six primer regions for basic LAMP signatures, or combinations of eight primer regions for LAMP signatures with loop primers, which can be used as LAMP signatures.  The identified primers are conserved among target organism sequences.
+
+This is primarily a Perl script with support modules.  The signature enumeration is not particularly complicated, but this structure served as the base for accomplishing other more sophisticated tasks.
