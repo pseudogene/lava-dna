@@ -1,5 +1,9 @@
 ################################################################################
 #
+# Version 0.1.1 (2016)
+# Updated by Micha‘l Bekaert <michael.bekaert@stir.ac.uk>.
+# Produced at the Institute of Aquacuture, University of Stirling, UK
+#
 # Copyright (c) 2010, Lawrence Livermore National Security, LLC.
 # Produced at the Lawrence Livermore National Laboratory
 # Written by Clinton Torres <clinton.torres@llnl.gov>.
@@ -221,28 +225,28 @@ sub newFromPrimer3
   #    "\n";
   #}
 
-  my $locationAndLength = $result->{"PRIMER_INTERNAL_OLIGO"};
+  my $locationAndLength = $result->{"PRIMER_INTERNAL"};
   my ($location, $length) = split(",", $locationAndLength);
 
   my $oligo = $classType->new(
       {
-      "sequence" => $result->{"PRIMER_INTERNAL_OLIGO_SEQUENCE"},
+      "sequence" => $result->{"PRIMER_INTERNAL_SEQUENCE"},
       "location" => $location,
       "strand" => "plus",
       });
 
   # Everything else is a tag
   $oligo->setTag("gc_percent",
-      $result->{"PRIMER_INTERNAL_OLIGO_GC_PERCENT"});
+      $result->{"PRIMER_INTERNAL_GC_PERCENT"});
   $oligo->setTag("primer3_tm",
-      $result->{"PRIMER_INTERNAL_OLIGO_TM"});
+      $result->{"PRIMER_INTERNAL_TM"});
   $oligo->setTag("primer3_penalty",
-      $result->{"PRIMER_INTERNAL_OLIGO_PENALTY"});
+      $result->{"PRIMER_INTERNAL_PENALTY"});
   # Not actually using these right now
   #$oligo->setTag("self_end_score", 
-  #    $result->{"PRIMER_INTERNAL_OLIGO_SELF_END"});
+  #    $result->{"PRIMER_INTERNA_SELF_END"});
   #$oligo->setTag("self_any_score",
-  #    $result->{"PRIMER_INTERNAL_OLIGO_SELF_ANY"});
+  #    $result->{"PRIMER_INTERNAL_SELF_ANY"});
 
   # Commented out because redundant with the instantiation above
   ## Oligo results are always on the plus strand 

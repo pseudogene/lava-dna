@@ -46,6 +46,7 @@ using Primer3 for enumeration.
       "min_tm" => 61,
       "max_tm" => 63,
       "most_to_return" => 20001,
+      "thermodynamic_path" => "/usr/local/share/primer3/primer3_config/",
     });
 
   # Get oligo results of enumerating over an MSA
@@ -112,6 +113,7 @@ sub new
     "max_tm" => "PRIMER_INTERNAL_OLIGO_MAX_TM",
     "max_poly_bases" => "PRIMER_INTERNAL_OLIGO_MAX_POLY_X",
     "most_to_return" => "PRIMER_NUM_RETURN", 
+    "thermodynamic_path" => "PRIMER_THERMODYNAMIC_PARAMETERS_PATH",
   };
 
   # Set of default primer3 targets (primer3 target name => value)
@@ -140,6 +142,7 @@ sub new
     $p3Names_r->{"min_tm"} => 61,
     $p3Names_r->{"max_tm"} => 63,
     $p3Names_r->{"most_to_return"} => 20001, # Off-by-one error in primer3?
+    $p3Names_r->{"thermodynamic_path"} => "/usr/local/share/primer3/primer3_config/",
   };
 
   $this->{"d_primer3Executable"} = $primer3Executable;
@@ -169,7 +172,7 @@ sub getOligos
 {
   my ($this, $alignment) = @_;
 
-  my $sequenceCount = $alignment->no_sequences();
+  my $sequenceCount = $alignment->num_sequences();
   if($sequenceCount <= 0)
   {
     confess("data error - MSA must contain at least one sequence");

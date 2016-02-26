@@ -1,6 +1,11 @@
-#!/usr/local/bin/perl -w
+#!/usr/bin/perl
 
 ################################################################################
+#
+#
+# Version 0.1.1 (2016)
+# Updated by Micha‘l Bekaert <michael.bekaert@stir.ac.uk>.
+# Produced at the Institute of Aquacuture, University of Stirling, UK
 #
 # Copyright (c) 2010, Lawrence Livermore National Security, LLC.
 # Produced at the Lawrence Livermore National Laboratory
@@ -134,6 +139,7 @@ $| = 0;
       "min_inner_pair_spacing=i" => \$options{"min_inner_pair_spacing"},
 
       "primer3_executable=s" => \$options{"primer3_executable"},
+      "thermodynamic_path=s" => \$options{"thermodynamic_path"},
       "alignment_format=s" => \$options{"alignment_format"},
 
       # TODO: Not sure if the pair target lengths should be exposed to the 
@@ -180,7 +186,8 @@ $| = 0;
       "outer_pair_target_length" => 200, 
       "middle_pair_target_length" => 160, 
       "inner_pair_target_length" => 50, 
-      "primer3_executable" => "/usr/bin/primer3_core",
+      "primer3_executable" => "/usr/local/bin/primer3_core",
+      "thermodynamic_path" => "/usr/local/share/primer3/primer3_config/",
       "alignment_format" => "fasta",
     );
 
@@ -286,6 +293,9 @@ $| = 0;
 	">]\n" .
       "    [--primer3_executable <path_to_primer3, default=" .
         $optionDefaults{"primer3_executable"} .
+	">]\n" .
+      "    [--thermodynamic_path <path_to_primer3_configuration, default=" .
+        $optionDefaults{"thermodynamic_path"} .
 	">]\n" .
       "    [--alignment_format <file format of alignment, default=\"" .
         $optionDefaults{"alignment_format"} .
@@ -489,6 +499,8 @@ $| = 0;
 
   my $primer3ExecutablePath = optionWithDefault($options_r, "primer3_executable",
     $optionDefaults{"primer3_executable"});
+  my $thermo_path = optionWithDefault($options_r, "thermodynamic_path",
+    $optionDefaults{"thermodynamic_path"});
   my $alignmehtFormat = optionWithDefault($options_r, "alignment_format",
     $optionDefaults{"alignment_format"});
 
@@ -535,6 +547,7 @@ $| = 0;
       "max_tm" => $outerPrimerMaxTM,
       "max_poly_bases" => $maxPolyBases,
       "most_to_return" => $maxEnumeratedPrimers,
+      "thermodynamic_path" => $thermo_path,
     });
 
   print "Enumerating outer forward primers\n";
@@ -567,6 +580,7 @@ $| = 0;
       "max_tm" => $loopPrimerMaxTM,
       "max_poly_bases" => $maxPolyBases,
       "most_to_return" => $maxEnumeratedPrimers,
+      "thermodynamic_path" => $thermo_path,
     });
 
   # This difference in naming is intentional for now (loopBackPrimers instead of 
@@ -598,6 +612,7 @@ $| = 0;
       "max_tm" => $middlePrimerMaxTM,
       "max_poly_bases" => $maxPolyBases,
       "most_to_return" => $maxEnumeratedPrimers,
+      "thermodynamic_path" => $thermo_path,
     });
 
   print "Enumerating middle forward primers\n";
@@ -628,6 +643,7 @@ $| = 0;
       "max_tm" => $innerPrimerMaxTM,
       "max_poly_bases" => $maxPolyBases,
       "most_to_return" => $maxEnumeratedPrimers,
+      "thermodynamic_path" => $thermo_path,
     });
 
   print "Enumerating inner forward primers\n";
@@ -1167,7 +1183,7 @@ $| = 0;
 	    "location" =>$placeHolderPrimer->location(),
 	    "length" => $placeHolderPrimer->length(),
 	    "analyzed_primer" => $placeHolderPrimer,
-	  })
+	  });
 
         $loopForwardSubset_r = [$placeHolderInfo];
 	$loopForwardCount = 1; 

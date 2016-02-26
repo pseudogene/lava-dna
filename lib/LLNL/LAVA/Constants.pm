@@ -1,5 +1,9 @@
 ################################################################################
 #
+# Version 0.1.1 (2016)
+# Updated by Micha‘l Bekaert <michael.bekaert@stir.ac.uk>.
+# Produced at the Institute of Aquacuture, University of Stirling, UK
+#
 # Copyright (c) 2010, Lawrence Livermore National Security, LLC.
 # Produced at the Lawrence Livermore National Laboratory
 # Written by Clinton Torres <clinton.torres@llnl.gov>.
@@ -78,7 +82,7 @@ require Exporter;
                    *VERSION)] );
 
 # Reference to a scalar is basicallya Perl constant
-*VERSION = \"0.1";
+*VERSION = \"0.1.1";
 
 # POD-formatted documentation
 

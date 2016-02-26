@@ -1,3 +1,48 @@
+LAVA release 0.1.1 (by Michael Bekaert <michael.bekaert@stir.ac.uk>)
+
+INTRODUCTION
+------------
+Lava has been updated to be compatible with the lasted update of Primer3 and BioPerl.
+Part of the source code was updated to fix syntax errors and deprecated code.
+A new mandatory parameter as been added PRIMER_THERMODYNAMIC_PARAMETERS_PATH, which
+should provide the path to the primer3_config directory. Usage
+  --thermodynamic_path=path
+or
+  <thermodynamic_path>path</thermodynamic_path>
+
+
+SYSTEM REQUIREMENTS
+-------------------
+
+Primer3 2+ (available at http://primer3.sourceforge.net/)
+	Primer-selection code
+
+BioPerl 1.6+ (available at http://www.bioperl.org/)
+	BioPerl's fundamental utilities and file IO are used heavily
+
+
+PRIMER3 REQUIRMENTS
+-------------------
+PRIMER_THERMODYNAMIC_PARAMETERS_PATH must point to the right location. This tag specifies
+the path to the directory that contains all the parameter files used by the thermodynamic
+approach. In Linux, there are two default locations that are tested if this tag is not
+defined: ./primer3_config/ and /usr/local/share/primer3/primer3_config/. For Windows,
+there is only one default location: .\primer3_config. If the the parameter files are not
+in one these locations, be sure to set PRIMER_THERMODYNAMIC_PARAMETERS_PATH.
+
+So if you download and compile primer3 form source using the Make command, to get primer3
+to run globally you need to copy the executueable, primer3_core, to your path and place
+the configuration directory, primer3_config in that same directory or at
+/usr/local/share/primer3/primer3_config/
+
+cd src
+sudo cp primer3_core /usr/local/bin
+sudo mkdir -p /usr/local/share/primer3/
+sudo cp -r primer3_config /usr/local/share/primer3/primer3_config/
+
+
+
+
 LAVA release 0.1
 
 
