@@ -31,7 +31,7 @@ using Primer3 for enumeration.
   # Instantiation
   $enumerator = LLNL::LAVA::OligoEnumerator::Primer3Conserved->new(
     {
-      "primer3_executable" => "/path/to/primer3_core",
+      "primer3_executable" => "/usr/bin/primer3_core",
     });
   
   # Set primer3 operating parameters 
@@ -46,7 +46,7 @@ using Primer3 for enumeration.
       "min_tm" => 61,
       "max_tm" => 63,
       "most_to_return" => 20001,
-      "thermodynamic_path" => "/usr/local/share/primer3/primer3_config/",
+      "thermodynamic_path" => "/etc/primer3_config/",
     });
 
   # Get oligo results of enumerating over an MSA
@@ -142,7 +142,7 @@ sub new
     $p3Names_r->{"min_tm"} => 61,
     $p3Names_r->{"max_tm"} => 63,
     $p3Names_r->{"most_to_return"} => 20001, # Off-by-one error in primer3?
-    $p3Names_r->{"thermodynamic_path"} => "/usr/local/share/primer3/primer3_config/",
+    $p3Names_r->{"thermodynamic_path"} => "/etc/primer3_config/",
   };
 
   $this->{"d_primer3Executable"} = $primer3Executable;

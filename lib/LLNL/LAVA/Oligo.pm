@@ -1,6 +1,6 @@
 ################################################################################
 #
-# Version 0.1.1 (2016)
+# Version 0.1.2 (2016)
 # Updated by Micha‘l Bekaert <michael.bekaert@stir.ac.uk>.
 # Produced at the Institute of Aquacuture, University of Stirling, UK
 #

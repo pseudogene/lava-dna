@@ -186,8 +186,8 @@ $| = 0;
       "outer_pair_target_length" => 200, 
       "middle_pair_target_length" => 160, 
       "inner_pair_target_length" => 50, 
-      "primer3_executable" => "/usr/local/bin/primer3_core",
-      "thermodynamic_path" => "/usr/local/share/primer3/primer3_config/",
+      "primer3_executable" => "/usr/bin/primer3_core",
+      "thermodynamic_path" => "/etc/primer3_config/",
       "alignment_format" => "fasta",
     );
 

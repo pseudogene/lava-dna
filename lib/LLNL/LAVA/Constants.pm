@@ -1,6 +1,6 @@
 ################################################################################
 #
-# Version 0.1.1 (2016)
+# Version 0.1.2 (2016)
 # Updated by Micha‘l Bekaert <michael.bekaert@stir.ac.uk>.
 # Produced at the Institute of Aquacuture, University of Stirling, UK
 #
@@ -82,7 +82,7 @@ require Exporter;
                    *VERSION)] );
 
 # Reference to a scalar is basicallya Perl constant
-*VERSION = \"0.1.1";
+*VERSION = \"0.1.2";
 
 # POD-formatted documentation
 
