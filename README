@@ -1,3 +1,14 @@
+LAVA release 0.1.2 (by Michael Bekaert <michael.bekaert@stir.ac.uk>)
+
+INTRODUCTION
+------------
+Lava has been updated to be compatible with any Linux distribution.
+Part of the source code was updated to allow more parameters to be accesible
+outer_pair_target_length, middle_pair_target_length and inner_pair_target_length.
+
+
+
+
 LAVA release 0.1.1 (by Michael Bekaert <michael.bekaert@stir.ac.uk>)
 
 INTRODUCTION

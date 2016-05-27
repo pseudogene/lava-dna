@@ -1,10 +1,10 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -w
 
 ################################################################################
 #
 #
-# Version 0.1.1 (2016)
-# Updated by Micha‘l Bekaert <michael.bekaert@stir.ac.uk>.
+# Version 0.1.2 (2016)
+# Updated by MichaÃ«l Bekaert <michael.bekaert@stir.ac.uk>.
 # Produced at the Institute of Aquacuture, University of Stirling, UK
 #
 # Copyright (c) 2010, Lawrence Livermore National Security, LLC.
@@ -264,23 +264,19 @@ $| = 0;
 	">]\n" .
       "    [--min_primer_spacing <max, default=" .
         $optionDefaults{"min_primer_spacing"} .  
-        ">]\n" .
+    ">]\n" .
       "    [--min_inner_pair_spacing <max, default=" .
         $optionDefaults{"min_inner_pair_spacing"} .
-        ">]\n" .
-
-      # TODO: Not sure if the pair target lengths should be exposed to the 
-      # user, or adjusted based on other parameters
-      #      "    [--outer_pair_target_length <length, default=" .
-      #        $optionDefaults{"outer_pair_target_length"} .
-      #        ">]\n" .
-      #      "    [--middle_pair_target_length <length, default=" .
-      #      $optionDefaults{"middle_pair_target_length"} .
-      #      ">]\n" .
-      #      "    [--inner_pair_target_length <length, default=" .
-      #      $optionDefaults{"inner_pair_target_length"} .
-      #      ">]\n" .
-
+    ">]\n" .
+      "    [--outer_pair_target_length <length, default=" .
+        $optionDefaults{"outer_pair_target_length"} .
+    ">]\n" .
+      "    [--middle_pair_target_length <length, default=" .
+      $optionDefaults{"middle_pair_target_length"} .
+    ">]\n" .
+      "    [--inner_pair_target_length <length, default=" .
+      $optionDefaults{"inner_pair_target_length"} .
+    ">]\n" .
       "    [--include_loop_primers <length, default=" .
         $optionDefaults{"include_loop_primers"} .
 	">]\n" .
