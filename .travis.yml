@@ -1,0 +1,11 @@
+language: perl
+perl:
+- '5.22'
+- '5.20'
+- '5.18'
+before_install:
+- sudo apt-get update -qq
+- sudo apt-get install -qq primer3 libxml-libxml-perl
+notifications:
+  slack:
+    secure: RfqpRTTnBa1ASqHlHp6I+JsSHd1dIewqt4ZKVzodeT9kSaZ9G2FwTxGazpTM5MGJ40+cBm7Aq89Ajl6zmB+XbuK2m9E4lvMWUcZgeZoQ4HVxXBOSs/TCMKarA91PmRbuGPJMAXA0F4Kd9lp3JlT0qq56KAVwylsxasKXEL75Vm/+0FlOwSpY4GVNHm8H6/qKpeT4q5Jqu+GxA5peZHOQILsNBCdn+8Y8qO7pvzHi6LNagRncTcaUvDO4eS2KYmcSMUuJQ+IElSFIZ38Qn8lKTX/ms91CGRNLy9/ff3vnT4GJTCO9Em+G9yd9cTGZIvXZQ7rUmDJLn08r2AsP8gSkN17n2nuifeY70FIzrOZupfFDfxu5G7T2Jz3H/DogFdSu2P5tIUQZwrUE802uoX32QPNjWTCQzRg0Ex+xPbiOZ4JnQpELpAt215lmNY7TOzM8idiROnDGTGuaRJrgiFWSgHPRNwrNGlJ3hqYDxjqYHy8eSCxf7Z/ls9wRRbw7AC6KfdqaTPAAHxSxcgiBlixYBUZnl3aIE/s0RJw0FYLJYSl6QJIEKZ6X7RKK8svaojy5qMbNDifKZdmmVzWNDGafLHXGLqVtdMLSejVLlIk4E46W413r7kqcH2Kb/Tj/Tkzvp77KqAJMqGrSc/0jT2+b/b1+UiCdz0VUsyYTCArROSE=
