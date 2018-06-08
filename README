@@ -1,7 +1,9 @@
-LAVA release 0.1.2 (by Michael Bekaert <michael.bekaert@stir.ac.uk>)
+[![Build Status](https://travis-ci.org/pseudogene/lamp-virus.svg?branch=master)](https://travis-ci.org/pseudogene/lava-dna)
 
-INTRODUCTION
-------------
+
+LAVA release 0.1.2 (by Michael Bekaert <michael.bekaert@stir.ac.uk>)
+------------------
+
 Lava has been updated to be compatible with any Linux distribution.
 Part of the source code was updated to allow more parameters to be accesible
 outer_pair_target_length, middle_pair_target_length and inner_pair_target_length.
@@ -9,10 +11,10 @@ outer_pair_target_length, middle_pair_target_length and inner_pair_target_length
 
 
 
-LAVA release 0.1.1 (by Michael Bekaert <michael.bekaert@stir.ac.uk>)
 
-INTRODUCTION
-------------
+LAVA release 0.1.1 (by Michael Bekaert <michael.bekaert@stir.ac.uk>)
+------------------
+
 Lava has been updated to be compatible with the lasted update of Primer3 and BioPerl.
 Part of the source code was updated to fix syntax errors and deprecated code.
 A new mandatory parameter as been added PRIMER_THERMODYNAMIC_PARAMETERS_PATH, which
@@ -54,7 +56,11 @@ sudo cp -r primer3_config /usr/local/share/primer3/primer3_config/
 
 
 
-LAVA release 0.1
+
+LAVA release 0.1 (by Clinton Torres <clinton.torres@llnl.gov>)
+----------------
+Original distribution and algorithm
+
 
 
 INTRODUCTION
