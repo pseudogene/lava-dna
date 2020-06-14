@@ -543,7 +543,6 @@ $| = 0;
       "max_tm" => $outerPrimerMaxTM,
       "max_poly_bases" => $maxPolyBases,
       "most_to_return" => $maxEnumeratedPrimers,
-      "thermodynamic_path" => $thermo_path,
     });
 
   print "Enumerating outer forward primers\n";
@@ -576,7 +575,6 @@ $| = 0;
       "max_tm" => $loopPrimerMaxTM,
       "max_poly_bases" => $maxPolyBases,
       "most_to_return" => $maxEnumeratedPrimers,
-      "thermodynamic_path" => $thermo_path,
     });
 
   # This difference in naming is intentional for now (loopBackPrimers instead of 
@@ -608,7 +606,6 @@ $| = 0;
       "max_tm" => $middlePrimerMaxTM,
       "max_poly_bases" => $maxPolyBases,
       "most_to_return" => $maxEnumeratedPrimers,
-      "thermodynamic_path" => $thermo_path,
     });
 
   print "Enumerating middle forward primers\n";
@@ -639,7 +636,6 @@ $| = 0;
       "max_tm" => $innerPrimerMaxTM,
       "max_poly_bases" => $maxPolyBases,
       "most_to_return" => $maxEnumeratedPrimers,
-      "thermodynamic_path" => $thermo_path,
     });
 
   print "Enumerating inner forward primers\n";

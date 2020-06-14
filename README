@@ -1,6 +1,14 @@
 
 [![Build Status](https://travis-ci.org/pseudogene/lava-dna.svg?branch=master)](https://travis-ci.org/pseudogene/lava-dna)
 
+LAVA release 0.1.3
+-------------------
+This update allows compatibility with the latest primer3 version, in which the thermodynamic parameters have been embedded as part of the code instead of as accessory files.
+As a result, the thermodynamic path command line argument is no longer needed.
+
+
+
+
 LAVA release 0.1.2 (by Michael Bekaert <michael.bekaert@stir.ac.uk>)
 ------------------
 
