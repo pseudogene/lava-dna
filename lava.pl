@@ -1755,7 +1755,7 @@ $| = 0;
     $possibleSignatures_r = reduceSignaturesByOverlap(
       {
 	"signatures" => $possibleSignatures_r,
-	"max_overlap_percent" => 0,
+	"max_overlap_percent" => 100,
       });
 
     # Stop iterating over plans if we have enough signatures to be done with
