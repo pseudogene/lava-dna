@@ -137,6 +137,7 @@ $| = 0;
       "min_signatures_for_success=i" => \$options{"min_signatures_for_success"},
       "min_primer_spacing=i" => \$options{"min_primer_spacing"},
       "min_inner_pair_spacing=i" => \$options{"min_inner_pair_spacing"},
+      "max_overlap_percent=i" => \$options{"max_overlap_percent"},
 
       "primer3_executable=s" => \$options{"primer3_executable"},
       "thermodynamic_path=s" => \$options{"thermodynamic_path"},
@@ -186,6 +187,7 @@ $| = 0;
       "outer_pair_target_length" => 200, 
       "middle_pair_target_length" => 160, 
       "inner_pair_target_length" => 50, 
+      "max_overlap_percent" => 99,
       "primer3_executable" => "/usr/bin/primer3_core",
       "thermodynamic_path" => "/etc/primer3_config/",
       "alignment_format" => "fasta",
@@ -286,6 +288,9 @@ $| = 0;
 	">]\n" .
       "    [--min_signatures_for_success <length, default=" .
         $optionDefaults{"min_signatures_for_success"} .
+  ">]\n" .
+      "    [--max_overlap_percent <length, default=" .
+        $optionDefaults{"max_overlap_percent"} .
 	">]\n" .
       "    [--primer3_executable <path_to_primer3, default=" .
         $optionDefaults{"primer3_executable"} .
@@ -470,6 +475,9 @@ $| = 0;
   my $minSignaturesForSuccess =
     optionWithDefault($options_r, "min_signatures_for_success",
       $optionDefaults{"min_signatures_for_success"});
+  my $maxSigOverlapPercent = 
+    optionWithDefault($options_r, "max_overlap_percent",
+      $optionDefaults{"max_overlap_percent"});
   my $minPrimerSpacing = 
     optionWithDefault($options_r, "min_primer_spacing", 
       $optionDefaults{"min_primer_spacing"});
@@ -1755,7 +1763,7 @@ $| = 0;
     $possibleSignatures_r = reduceSignaturesByOverlap(
       {
 	"signatures" => $possibleSignatures_r,
-	"max_overlap_percent" => 100,
+	"max_overlap_percent" => $maxSigOverlapPercent,
       });
 
     # Stop iterating over plans if we have enough signatures to be done with
@@ -1789,7 +1797,7 @@ $| = 0;
 
   # Write the output fasta
   #TODO: watch for stompping?
-  open(OUTANSWER, "> $outputFileName") || 
+  open(OUTANSWER, "> $outputFileName") ||
     confess("file error - failed to open output file \"$outputFileName\" " .
       "for writing: $!");
 
@@ -1807,7 +1815,7 @@ $| = 0;
     my $locationSummary = $signature->getLocationSummary();
     #my $penaltySummary = $signature->getPenaltySummary(); 
     #my $tmSummary = $signature->getTMSummary();
-     
+
     #print OUTANSWER ">$signatureName F3 (penatly: $penalty) (locations: $locationSummary) " .
     #  "(sub-penalties: $penaltySummary) (tms: $tmSummary)\n"; 
     # TODO: update the sig reader to load this data too! (need something more flexible!)
@@ -1816,11 +1824,11 @@ $| = 0;
     my $penaltyNotes = $signature->getTag("penalty_notes");
     print OUTANSWER ">$signatureName F3 (penalty: $penalty) $penaltyNotes (locations: $locationSummary)\n";
     print OUTANSWER $signature->getF3() . "\n";
-    print OUTANSWER ">$signatureName B3\n"; 
+    print OUTANSWER ">$signatureName B3\n";
     print OUTANSWER $signature->getB3() . "\n";
-    print OUTANSWER ">$signatureName FIP\n"; 
+    print OUTANSWER ">$signatureName FIP\n";
     print OUTANSWER $signature->getFIP() . "\n";
-    print OUTANSWER ">$signatureName BIP\n"; 
+    print OUTANSWER ">$signatureName BIP\n";
     print OUTANSWER $signature->getBIP() . "\n";
     if($includeLoopPrimers == $TRUE)
     {
@@ -1832,7 +1840,7 @@ $| = 0;
       print OUTANSWER ">$signatureName BLOOP\n";
       print OUTANSWER $bloopSequence . "\n";
     }
-      
+
     # Return the linker back to its original state
     $signature->linker($originalLinker);
   }
