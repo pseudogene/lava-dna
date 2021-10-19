@@ -2480,16 +2480,16 @@ sub reduceSignaturesByOverlap
 
   my $signatureCount= scalar(@{$signatures_r});
   #print "Starting with $primerCount primers\n";
-  print " Reducing signatures $signatureCount->";
+  print " Reducing signatures ha $signatureCount->";
   
   # Short-cut if we're at 100% overlap
-  if($maxOverlapPercent == 100)
-  {
-    my @signatureList = ();
-    foreach my $signature(@{$signatures_r})
-    {
-      push(@signatureList, $signature);
-    }
+  #if($maxOverlapPercent == 100)
+  #{
+  #  my @signatureList = ();
+  #  foreach my $signature(@{$signatures_r})
+  #  {
+  #    push(@signatureList, $signature);
+  #  }
 
     # Go ahead and sort primers by location for their return :)
     @signatureList = 
