@@ -2466,7 +2466,7 @@ sub reduceSignaturesByOverlap
   my ($paramHash_r) = @_;
 
   my $signatures_r = optionRequired($paramHash_r, "signatures");
-  my $maxOverlapPercent = optionWithDefault($paramHash_r, "max_overlap_percent", 0);
+  my $maxOverlapPercent = optionWithDefault($paramHash_r, "max_overlap_percent", 90);
   my $sortByScore = optionWithDefault($paramHash_r, "sort_by_score", $FALSE);
   my $sortByLocation = optionWithDefault($paramHash_r, "sort_by_location", $FALSE);
   if($sortByScore == $FALSE && $sortByLocation == $FALSE)
