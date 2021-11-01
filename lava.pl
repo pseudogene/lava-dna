@@ -187,7 +187,7 @@ $| = 0;
       "outer_pair_target_length" => 200, 
       "middle_pair_target_length" => 160, 
       "inner_pair_target_length" => 50, 
-      "max_overlap_percent" => 99,
+      "max_overlap_percent" => 0,
       "primer3_executable" => "/usr/bin/primer3_core",
       "thermodynamic_path" => "/etc/primer3_config/",
       "alignment_format" => "fasta",
@@ -505,7 +505,7 @@ $| = 0;
     $optionDefaults{"primer3_executable"});
   my $thermo_path = optionWithDefault($options_r, "thermodynamic_path",
     $optionDefaults{"thermodynamic_path"});
-  my $alignmehtFormat = optionWithDefault($options_r, "alignment_format",
+  my $alignmentFormat = optionWithDefault($options_r, "alignment_format",
     $optionDefaults{"alignment_format"});
 
   # In theory, the overall score logic belongs in a PrimerSetAnalyzer, 
@@ -526,7 +526,7 @@ $| = 0;
 
   # Load the input alignment, could be a single sequence
   # TODO: # Make sure the alignment format option suggestion is working
-  my $alignIN = Bio::AlignIO->new(-file => "< $alignmentFastaName");
+  my $alignIN = Bio::AlignIO->new(-file => "< $alignmentFastaName", -format => $alignmentFormat);
   my $inputMSA = $alignIN->next_aln();
   my $sequenceLength = $inputMSA->length;
 
