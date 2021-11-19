@@ -491,7 +491,7 @@ $| = 0;
     optionWithDefault($options_r, "outer_pair_target_length", 
       $optionDefaults{"outer_pair_target_length"});
   my $middlePairTargetLength = 
-    optionWithDefault($options_r, "middle_pair_target_length", 
+    optionWithDefault($options_r, "middle_pair_target_length",
       $optionDefaults{"middle_pair_target_length"});
   my $innerPairTargetLength =
     optionWithDefault($options_r, "inner_pair_target_length", 

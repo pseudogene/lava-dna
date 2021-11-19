@@ -106,13 +106,18 @@ sub new
   # No values can be set through setPrimer3Targets() that aren't listed here 
   my $p3Names_r = {
     "target_length" => "PRIMER_INTERNAL_OLIGO_OPT_SIZE",
-    "min_length" => "PRIMER_INTERNAL_OLIGO_MIN_SIZE",
-    "max_length" => "PRIMER_INTERNAL_OLIGO_MAX_SIZE",
-    "target_tm" => "PRIMER_INTERNAL_OLIGO_OPT_TM",
-    "min_tm" => "PRIMER_INTERNAL_OLIGO_MIN_TM",
-    "max_tm" => "PRIMER_INTERNAL_OLIGO_MAX_TM",
+    "min_length" => "PRIMER_MIN_SIZE",
+    "max_length" => "PRIMER_MAX_SIZE",
+    "target_tm" => "PRIMER_OPT_TM",
+    "min_tm" => "PRIMER_MIN_TM",
+    "max_tm" => "PRIMER_MAX_TM",
     "max_poly_bases" => "PRIMER_INTERNAL_OLIGO_MAX_POLY_X",
-    "most_to_return" => "PRIMER_NUM_RETURN", 
+    "most_to_return" => "PRIMER_NUM_RETURN",
+    "min_gc" => "PRIMER_MIN_GC",
+    "max_gc" => "PRIMER_MAX_GC",
+    "salt_divalent" => "PRIMER_SALT_DIVALENT",
+    "salt_monovalent" => "PRIMER_SALT_CONC",
+    "dntp_conc" => "PRIMER_DNTP_CONC",
   };
 
   # Set of default primer3 targets (primer3 target name => value)
@@ -123,23 +128,25 @@ sub new
 
     "PRIMER_SALT_CONC" => 50, # Milli-molar
     "PRIMER_DNA_CONC" => 50, # Nano-molar
+    "PRIMER_SALT_DIVALENT"=> 1.5,
     "PRIMER_INTERNAL_OLIGO_MAX_POLY_X" => 4,
+    "PRIMER_DNTP_CONC" => 1.4,
     #"PRIMER_NUM_NS_ACCEPTED" => 0, # Already the default?
 
     # Not sure if we should make these adjustable or not
-    "PRIMER_INTERNAL_OLIGO_MIN_GC" => 20,
-    "PRIMER_INTERNAL_OLIGO_MAX_GC" => 80,
+    "PRIMER_MIN_GC" => 10,
+    "PRIMER_MAX_GC" => 60,
 
     # Default suggested by Primer3 documentation
     #"PRIMER_INTERNAL_OLIGO_MAX_END_STABILITY" => 9.0, 
     #"PRIMER_MAX_END_STABILITY" => 9.0, 
   
     $p3Names_r->{"target_length"} => 20,
-    $p3Names_r->{"min_length"} => 18,
+    $p3Names_r->{"min_length"} => 16,
     $p3Names_r->{"max_length"} => 27,
-    $p3Names_r->{"target_tm"} => 62,
-    $p3Names_r->{"min_tm"} => 61,
-    $p3Names_r->{"max_tm"} => 63,
+    $p3Names_r->{"target_tm"} => 53,
+    $p3Names_r->{"min_tm"} => 56,
+    $p3Names_r->{"max_tm"} => 49,
     $p3Names_r->{"most_to_return"} => 20001, # Off-by-one error in primer3?
   };
 
