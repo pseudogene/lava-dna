@@ -142,6 +142,11 @@ $| = 0;
       "primer3_executable=s" => \$options{"primer3_executable"},
       "thermodynamic_path=s" => \$options{"thermodynamic_path"},
       "alignment_format=s" => \$options{"alignment_format"},
+      "dntp_conc=f" => \$options{"dntp_conc"},
+      "salt_divalent=f" => \$options{"salt_divalent"},
+      "salt_monovalent=f" => \$options{"salt_monovalent"}, 
+      "dna_conc=f" => \$options{"dna_conc"},
+
 
       # TODO: Not sure if the pair target lengths should be exposed to the 
       # user, or adjusted based on other parameters
@@ -188,6 +193,10 @@ $| = 0;
       "middle_pair_target_length" => 160, 
       "inner_pair_target_length" => 50, 
       "max_overlap_percent" => 0,
+      "dntp_conc" => 1.4,
+      "salt_divalent" => 8,
+      "salt_monovalent" => 50,
+      "dna_conc" => 400,
       "primer3_executable" => "/usr/bin/primer3_core",
       "thermodynamic_path" => "/etc/primer3_config/",
       "alignment_format" => "fasta",
@@ -289,8 +298,20 @@ $| = 0;
       "    [--min_signatures_for_success <length, default=" .
         $optionDefaults{"min_signatures_for_success"} .
   ">]\n" .
-      "    [--max_overlap_percent <length, default=" .
-        $optionDefaults{"max_overlap_percent"} .
+    "    [--max_overlap_percent <length, default=" .
+      $optionDefaults{"max_overlap_percent"} .
+  ">]\n" .
+    "    [--dna_conc <length, default=" .
+      $optionDefaults{"dna_conc"} .
+  ">]\n" .
+    "    [--dntp_conc <length, default=" .
+      $optionDefaults{"dntp_conc"} .
+  ">]\n" .
+    "    [--salt_monovalent <length, default=" .
+      $optionDefaults{"salt_monovalent"} .
+  ">]\n" .
+    "    [--salt_divalent <length, default=" .
+      $optionDefaults{"salt_divalent"} .
 	">]\n" .
       "    [--primer3_executable <path_to_primer3, default=" .
         $optionDefaults{"primer3_executable"} .
@@ -467,7 +488,8 @@ $| = 0;
     optionWithDefault($options_r, "max_poly_bases", 
       $optionDefaults{"max_poly_bases"});
   
-  my $includeLoopPrimers = optionWithDefault($options_r, "include_loop_primers",
+  my $includeLoopPrimers = 
+    optionWithDefault($options_r, "include_loop_primers",
     $optionDefaults{"include_loop_primers"});
   my $loopMinGap = 
     optionWithDefault($options_r, "loop_min_gap", 
@@ -478,6 +500,20 @@ $| = 0;
   my $maxSigOverlapPercent = 
     optionWithDefault($options_r, "max_overlap_percent",
       $optionDefaults{"max_overlap_percent"});
+
+  my $dnaConc = 
+    optionWithDefault($options_r, "dna_conc",
+     $optionDefaults{"dna_conc"});
+  my $dntpConc = 
+    optionWithDefault($options_r, "dntp_conc",
+     $optionDefaults{"dntp_conc"});
+  my $saltMonovalent = 
+    optionWithDefault($options_r, "salt_monovalent",
+     $optionDefaults{"salt_monovalent"});
+  my $saltDivalent = 
+    optionWithDefault($options_r, "salt_divalent",
+     $optionDefaults{"salt_divalent"});
+    
   my $minPrimerSpacing = 
     optionWithDefault($options_r, "min_primer_spacing", 
       $optionDefaults{"min_primer_spacing"});
@@ -534,7 +570,7 @@ $| = 0;
   # But since Primer3 doesn't accept "PRIMER_INTERNAL_OLIGO_MAX_STABILITY", 
   # we're going to have to filter that out ourselves, but it does mean that we can
   # cheat and just reverse complement the forward primers to get the reverse primers.
-  my $maxEnumeratedPrimers = 20001; # Off-by-one in primer3?
+  my $maxEnumeratedPrimers = 10001; # Off-by-one in primer3?
 
   # Enumerate outer primers
   my $outerEnumerator = LLNL::LAVA::OligoEnumerator::Primer3Conserved->new(
@@ -551,6 +587,10 @@ $| = 0;
       "max_tm" => $outerPrimerMaxTM,
       "max_poly_bases" => $maxPolyBases,
       "most_to_return" => $maxEnumeratedPrimers,
+      "dna_conc" => $dnaConc,
+      "dntp_conc" => $dntpConc,
+      "salt_monovalent" => $saltMonovalent,
+      "salt_divalent" => $saltDivalent,
     });
 
   print "Enumerating outer forward primers\n";
@@ -583,6 +623,10 @@ $| = 0;
       "max_tm" => $loopPrimerMaxTM,
       "max_poly_bases" => $maxPolyBases,
       "most_to_return" => $maxEnumeratedPrimers,
+      "dna_conc" => $dnaConc,
+      "dntp_conc" => $dntpConc,
+      "salt_monovalent" => $saltMonovalent,
+      "salt_divalent" => $saltDivalent,
     });
 
   # This difference in naming is intentional for now (loopBackPrimers instead of 
@@ -614,6 +658,10 @@ $| = 0;
       "max_tm" => $middlePrimerMaxTM,
       "max_poly_bases" => $maxPolyBases,
       "most_to_return" => $maxEnumeratedPrimers,
+      "dna_conc" => $dnaConc,
+      "dntp_conc" => $dntpConc,
+      "salt_monovalent" => $saltMonovalent,
+      "salt_divalent" => $saltDivalent,
     });
 
   print "Enumerating middle forward primers\n";
@@ -644,6 +692,10 @@ $| = 0;
       "max_tm" => $innerPrimerMaxTM,
       "max_poly_bases" => $maxPolyBases,
       "most_to_return" => $maxEnumeratedPrimers,
+      "dna_conc" => $dnaConc,
+      "dntp_conc" => $dntpConc,
+      "salt_monovalent" => $saltMonovalent,
+      "salt_divalent" => $saltDivalent,
     });
 
   print "Enumerating inner forward primers\n";
