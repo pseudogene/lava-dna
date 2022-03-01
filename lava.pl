@@ -137,15 +137,16 @@ $| = 0;
       "min_signatures_for_success=i" => \$options{"min_signatures_for_success"},
       "min_primer_spacing=i" => \$options{"min_primer_spacing"},
       "min_inner_pair_spacing=i" => \$options{"min_inner_pair_spacing"},
-      "max_overlap_percent=i" => \$options{"max_overlap_percent"},
+      "max_overlap_percent=i" => \$options{"max_overlap_percent"}, # new
 
       "primer3_executable=s" => \$options{"primer3_executable"},
       "thermodynamic_path=s" => \$options{"thermodynamic_path"},
       "alignment_format=s" => \$options{"alignment_format"},
-      "dntp_conc=f" => \$options{"dntp_conc"},
-      "salt_divalent=f" => \$options{"salt_divalent"},
-      "salt_monovalent=f" => \$options{"salt_monovalent"}, 
-      "dna_conc=f" => \$options{"dna_conc"},
+      "dntp_conc=f" => \$options{"dntp_conc"}, # new
+      "salt_divalent=f" => \$options{"salt_divalent"}, # new
+      "salt_monovalent=f" => \$options{"salt_monovalent"}, # new
+      "dna_conc=f" => \$options{"dna_conc"}, # new
+      "max_primer_gen=f" => \$options{"max_primer_gen"}, # new
 
 
       # TODO: Not sure if the pair target lengths should be exposed to the 
@@ -176,10 +177,6 @@ $| = 0;
       "inner_primer_min_length" => 20,
       "inner_primer_max_length" => 26,
       "inner_primer_target_tm" => "62.0",
-      #"inner_primer_target_length" => 19,
-      #"inner_primer_min_length" => 17,
-      #"inner_primer_max_length" => 24,
-      #"inner_primer_target_tm" => "57.0",
       "max_poly_bases" => 5,
       "include_loop_primers" => $TRUE,
       "loop_min_gap" => 25,
@@ -190,13 +187,14 @@ $| = 0;
       # Currently, no penalty is assessed for lengths under the target size, so
       # these sizes are a little larger than they need to be.
       "outer_pair_target_length" => 200, 
-      "middle_pair_target_length" => 160, 
+      "middle_pair_target_length" => 160,
       "inner_pair_target_length" => 50, 
       "max_overlap_percent" => 0,
       "dntp_conc" => 1.4,
       "salt_divalent" => 8,
       "salt_monovalent" => 50,
       "dna_conc" => 400,
+      "max_primer_gen" => 10001, # primer3 rounding error off by 1?
       "primer3_executable" => "/usr/bin/primer3_core",
       "thermodynamic_path" => "/etc/primer3_config/",
       "alignment_format" => "fasta",
@@ -312,6 +310,9 @@ $| = 0;
   ">]\n" .
     "    [--salt_divalent <length, default=" .
       $optionDefaults{"salt_divalent"} .
+ ">]\n" .
+    "    [--max_primer_gen <length, default=" .
+      $optionDefaults{"max_primer_gen"} .
 	">]\n" .
       "    [--primer3_executable <path_to_primer3, default=" .
         $optionDefaults{"primer3_executable"} .
@@ -513,6 +514,9 @@ $| = 0;
   my $saltDivalent = 
     optionWithDefault($options_r, "salt_divalent",
      $optionDefaults{"salt_divalent"});
+  my $maxEnumeratedPrimers = 
+    optionWithDefault($options_r, "max_primer_gen",
+    $optionDefaults{"max_primer_gen"});
     
   my $minPrimerSpacing = 
     optionWithDefault($options_r, "min_primer_spacing", 
@@ -552,8 +556,8 @@ $| = 0;
   my $middlePenaltyWeight = "1.1";
   my $outerPenaltyWeight = "1.0";
 
-  my $innerToLoopPenaltyWeight = 1.0;
-  my $loopToMiddlePenaltyWeight = 1.0;
+  my $innerToLoopPenaltyWeight = 1.0; 
+  my $loopToMiddlePenaltyWeight = 1.0; 
   my $innerToMiddlePenaltyWeight = 1.0;
   my $middleToOuterPenaltyWeight = 1.0;
   my $innerForwardToReversePenaltyWeight = 1.0;
@@ -570,7 +574,6 @@ $| = 0;
   # But since Primer3 doesn't accept "PRIMER_INTERNAL_OLIGO_MAX_STABILITY", 
   # we're going to have to filter that out ourselves, but it does mean that we can
   # cheat and just reverse complement the forward primers to get the reverse primers.
-  my $maxEnumeratedPrimers = 10001; # Off-by-one in primer3?
 
   # Enumerate outer primers
   my $outerEnumerator = LLNL::LAVA::OligoEnumerator::Primer3Conserved->new(
