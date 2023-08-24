@@ -105,14 +105,20 @@ sub new
   # Map of parameter name to official Primer3 target name
   # No values can be set through setPrimer3Targets() that aren't listed here 
   my $p3Names_r = {
-    "target_length" => "PRIMER_INTERNAL_OLIGO_OPT_SIZE",
-    "min_length" => "PRIMER_INTERNAL_OLIGO_MIN_SIZE",
-    "max_length" => "PRIMER_INTERNAL_OLIGO_MAX_SIZE",
-    "target_tm" => "PRIMER_INTERNAL_OLIGO_OPT_TM",
-    "min_tm" => "PRIMER_INTERNAL_OLIGO_MIN_TM",
-    "max_tm" => "PRIMER_INTERNAL_OLIGO_MAX_TM",
+    "target_length" => "PRIMER_INTERNAL_OPT_SIZE",
+    "min_length" => "PRIMER_INTERNAL_MIN_SIZE",
+    "max_length" => "PRIMER_INTERNAL_MAX_SIZE",
+    "target_tm" => "PRIMER_INTERNAL_OPT_TM",
+    "min_tm" => "PRIMER_INTERNAL_MIN_TM",
+    "max_tm" => "PRIMER_INTERNAL_MAX_TM",
     "max_poly_bases" => "PRIMER_INTERNAL_OLIGO_MAX_POLY_X",
-    "most_to_return" => "PRIMER_NUM_RETURN", 
+    "most_to_return" => "PRIMER_NUM_RETURN",
+    "min_gc" => "PRIMER_INTERNAL_MIN_GC",
+    "max_gc" => "PRIMER_INTERNAL_MAX_GC",
+    "dna_conc" => "PRIMER_INTERNAL_DNA_CONC",
+    "salt_divalent" => "PRIMER_INTERNAL_SALT_DIVALENT",
+    "salt_monovalent" => "PRIMER_INTERNAL_SALT_MONOVALENT",
+    "dntp_conc" => "PRIMER_INTERNAL_DNTP_CONC",
   };
 
   # Set of default primer3 targets (primer3 target name => value)
@@ -120,26 +126,23 @@ sub new
     "PRIMER_TASK" => "pick_hyb_probe_only",
     #"PRIMER_INTERNAL_OLIGO_SELF_ANY" => "12.00",
     "PRIMER_INTERNAL_OLIGO_SELF_ANY" => "8.00",
-
-    "PRIMER_SALT_CONC" => 50, # Milli-molar
-    "PRIMER_DNA_CONC" => 50, # Nano-molar
-    "PRIMER_INTERNAL_OLIGO_MAX_POLY_X" => 4,
-    #"PRIMER_NUM_NS_ACCEPTED" => 0, # Already the default?
-
-    # Not sure if we should make these adjustable or not
-    "PRIMER_INTERNAL_OLIGO_MIN_GC" => 20,
-    "PRIMER_INTERNAL_OLIGO_MAX_GC" => 80,
+    "PRIMER_INTERNAL_MAX_POLY_X" => 4,
 
     # Default suggested by Primer3 documentation
     #"PRIMER_INTERNAL_OLIGO_MAX_END_STABILITY" => 9.0, 
     #"PRIMER_MAX_END_STABILITY" => 9.0, 
-  
+    $p3Names_r->{"salt_monovalent"} => 50,
+    $p3Names_r->{"salt_divalent"} => 8,
+    $p3Names_r->{"dntp_conc"} => 1.4, #nano-molar
+    $p3Names_r->{"dna_conc"} => 400,
+    $p3Names_r->{"min_gc"} => 30,
+    $p3Names_r->{"max_gc"} => 80,
     $p3Names_r->{"target_length"} => 20,
     $p3Names_r->{"min_length"} => 18,
     $p3Names_r->{"max_length"} => 27,
-    $p3Names_r->{"target_tm"} => 62,
-    $p3Names_r->{"min_tm"} => 61,
-    $p3Names_r->{"max_tm"} => 63,
+    $p3Names_r->{"target_tm"} => 60,
+    $p3Names_r->{"min_tm"} => 50,
+    $p3Names_r->{"max_tm"} => 69,
     $p3Names_r->{"most_to_return"} => 20001, # Off-by-one error in primer3?
   };
 
@@ -228,12 +231,10 @@ sub getOligos
     -seq => $firstSequence,
     -path => $this->{"d_primer3Executable"});
   my $p3Targets_r = $this->{"d_primer3Targets"};
-  #foreach my $targetName (keys(%{$p3Targets_r}))
-  #{
-  #  print "  $targetName\t" .
-  #    $p3Targets_r->{$targetName} .
-  #    "\n"; 
-  #}
+#  foreach my $targetName (keys(%{$primer3->arguments()}))
+#  {
+#   print "  $targetName\t" + $p3Targets_r->{$targetName} + "\n"; 
+# }
 
   $primer3->add_targets(%{$p3Targets_r});
 

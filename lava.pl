@@ -137,10 +137,17 @@ $| = 0;
       "min_signatures_for_success=i" => \$options{"min_signatures_for_success"},
       "min_primer_spacing=i" => \$options{"min_primer_spacing"},
       "min_inner_pair_spacing=i" => \$options{"min_inner_pair_spacing"},
+      "max_overlap_percent=i" => \$options{"max_overlap_percent"}, # new
 
       "primer3_executable=s" => \$options{"primer3_executable"},
       "thermodynamic_path=s" => \$options{"thermodynamic_path"},
       "alignment_format=s" => \$options{"alignment_format"},
+      "dntp_conc=f" => \$options{"dntp_conc"}, # new
+      "salt_divalent=f" => \$options{"salt_divalent"}, # new
+      "salt_monovalent=f" => \$options{"salt_monovalent"}, # new
+      "dna_conc=f" => \$options{"dna_conc"}, # new
+      "max_primer_gen=f" => \$options{"max_primer_gen"}, # new
+
 
       # TODO: Not sure if the pair target lengths should be exposed to the 
       # user, or adjusted based on other parameters
@@ -170,10 +177,6 @@ $| = 0;
       "inner_primer_min_length" => 20,
       "inner_primer_max_length" => 26,
       "inner_primer_target_tm" => "62.0",
-      #"inner_primer_target_length" => 19,
-      #"inner_primer_min_length" => 17,
-      #"inner_primer_max_length" => 24,
-      #"inner_primer_target_tm" => "57.0",
       "max_poly_bases" => 5,
       "include_loop_primers" => $TRUE,
       "loop_min_gap" => 25,
@@ -184,8 +187,14 @@ $| = 0;
       # Currently, no penalty is assessed for lengths under the target size, so
       # these sizes are a little larger than they need to be.
       "outer_pair_target_length" => 200, 
-      "middle_pair_target_length" => 160, 
+      "middle_pair_target_length" => 160,
       "inner_pair_target_length" => 50, 
+      "max_overlap_percent" => 0,
+      "dntp_conc" => 1.4,
+      "salt_divalent" => 8,
+      "salt_monovalent" => 50,
+      "dna_conc" => 400,
+      "max_primer_gen" => 10001, # primer3 rounding error off by 1?
       "primer3_executable" => "/usr/bin/primer3_core",
       "thermodynamic_path" => "/etc/primer3_config/",
       "alignment_format" => "fasta",
@@ -286,6 +295,24 @@ $| = 0;
 	">]\n" .
       "    [--min_signatures_for_success <length, default=" .
         $optionDefaults{"min_signatures_for_success"} .
+  ">]\n" .
+    "    [--max_overlap_percent <length, default=" .
+      $optionDefaults{"max_overlap_percent"} .
+  ">]\n" .
+    "    [--dna_conc <length, default=" .
+      $optionDefaults{"dna_conc"} .
+  ">]\n" .
+    "    [--dntp_conc <length, default=" .
+      $optionDefaults{"dntp_conc"} .
+  ">]\n" .
+    "    [--salt_monovalent <length, default=" .
+      $optionDefaults{"salt_monovalent"} .
+  ">]\n" .
+    "    [--salt_divalent <length, default=" .
+      $optionDefaults{"salt_divalent"} .
+ ">]\n" .
+    "    [--max_primer_gen <length, default=" .
+      $optionDefaults{"max_primer_gen"} .
 	">]\n" .
       "    [--primer3_executable <path_to_primer3, default=" .
         $optionDefaults{"primer3_executable"} .
@@ -462,7 +489,8 @@ $| = 0;
     optionWithDefault($options_r, "max_poly_bases", 
       $optionDefaults{"max_poly_bases"});
   
-  my $includeLoopPrimers = optionWithDefault($options_r, "include_loop_primers",
+  my $includeLoopPrimers = 
+    optionWithDefault($options_r, "include_loop_primers",
     $optionDefaults{"include_loop_primers"});
   my $loopMinGap = 
     optionWithDefault($options_r, "loop_min_gap", 
@@ -470,6 +498,26 @@ $| = 0;
   my $minSignaturesForSuccess =
     optionWithDefault($options_r, "min_signatures_for_success",
       $optionDefaults{"min_signatures_for_success"});
+  my $maxSigOverlapPercent = 
+    optionWithDefault($options_r, "max_overlap_percent",
+      $optionDefaults{"max_overlap_percent"});
+
+  my $dnaConc = 
+    optionWithDefault($options_r, "dna_conc",
+     $optionDefaults{"dna_conc"});
+  my $dntpConc = 
+    optionWithDefault($options_r, "dntp_conc",
+     $optionDefaults{"dntp_conc"});
+  my $saltMonovalent = 
+    optionWithDefault($options_r, "salt_monovalent",
+     $optionDefaults{"salt_monovalent"});
+  my $saltDivalent = 
+    optionWithDefault($options_r, "salt_divalent",
+     $optionDefaults{"salt_divalent"});
+  my $maxEnumeratedPrimers = 
+    optionWithDefault($options_r, "max_primer_gen",
+    $optionDefaults{"max_primer_gen"});
+    
   my $minPrimerSpacing = 
     optionWithDefault($options_r, "min_primer_spacing", 
       $optionDefaults{"min_primer_spacing"});
@@ -483,7 +531,7 @@ $| = 0;
     optionWithDefault($options_r, "outer_pair_target_length", 
       $optionDefaults{"outer_pair_target_length"});
   my $middlePairTargetLength = 
-    optionWithDefault($options_r, "middle_pair_target_length", 
+    optionWithDefault($options_r, "middle_pair_target_length",
       $optionDefaults{"middle_pair_target_length"});
   my $innerPairTargetLength =
     optionWithDefault($options_r, "inner_pair_target_length", 
@@ -497,7 +545,7 @@ $| = 0;
     $optionDefaults{"primer3_executable"});
   my $thermo_path = optionWithDefault($options_r, "thermodynamic_path",
     $optionDefaults{"thermodynamic_path"});
-  my $alignmehtFormat = optionWithDefault($options_r, "alignment_format",
+  my $alignmentFormat = optionWithDefault($options_r, "alignment_format",
     $optionDefaults{"alignment_format"});
 
   # In theory, the overall score logic belongs in a PrimerSetAnalyzer, 
@@ -508,8 +556,8 @@ $| = 0;
   my $middlePenaltyWeight = "1.1";
   my $outerPenaltyWeight = "1.0";
 
-  my $innerToLoopPenaltyWeight = 1.0;
-  my $loopToMiddlePenaltyWeight = 1.0;
+  my $innerToLoopPenaltyWeight = 1.0; 
+  my $loopToMiddlePenaltyWeight = 1.0; 
   my $innerToMiddlePenaltyWeight = 1.0;
   my $middleToOuterPenaltyWeight = 1.0;
   my $innerForwardToReversePenaltyWeight = 1.0;
@@ -518,7 +566,7 @@ $| = 0;
 
   # Load the input alignment, could be a single sequence
   # TODO: # Make sure the alignment format option suggestion is working
-  my $alignIN = Bio::AlignIO->new(-file => "< $alignmentFastaName");
+  my $alignIN = Bio::AlignIO->new(-file => "< $alignmentFastaName", -format => $alignmentFormat);
   my $inputMSA = $alignIN->next_aln();
   my $sequenceLength = $inputMSA->length;
 
@@ -526,7 +574,6 @@ $| = 0;
   # But since Primer3 doesn't accept "PRIMER_INTERNAL_OLIGO_MAX_STABILITY", 
   # we're going to have to filter that out ourselves, but it does mean that we can
   # cheat and just reverse complement the forward primers to get the reverse primers.
-  my $maxEnumeratedPrimers = 20001; # Off-by-one in primer3?
 
   # Enumerate outer primers
   my $outerEnumerator = LLNL::LAVA::OligoEnumerator::Primer3Conserved->new(
@@ -543,6 +590,10 @@ $| = 0;
       "max_tm" => $outerPrimerMaxTM,
       "max_poly_bases" => $maxPolyBases,
       "most_to_return" => $maxEnumeratedPrimers,
+      "dna_conc" => $dnaConc,
+      "dntp_conc" => $dntpConc,
+      "salt_monovalent" => $saltMonovalent,
+      "salt_divalent" => $saltDivalent,
     });
 
   print "Enumerating outer forward primers\n";
@@ -575,6 +626,10 @@ $| = 0;
       "max_tm" => $loopPrimerMaxTM,
       "max_poly_bases" => $maxPolyBases,
       "most_to_return" => $maxEnumeratedPrimers,
+      "dna_conc" => $dnaConc,
+      "dntp_conc" => $dntpConc,
+      "salt_monovalent" => $saltMonovalent,
+      "salt_divalent" => $saltDivalent,
     });
 
   # This difference in naming is intentional for now (loopBackPrimers instead of 
@@ -606,6 +661,10 @@ $| = 0;
       "max_tm" => $middlePrimerMaxTM,
       "max_poly_bases" => $maxPolyBases,
       "most_to_return" => $maxEnumeratedPrimers,
+      "dna_conc" => $dnaConc,
+      "dntp_conc" => $dntpConc,
+      "salt_monovalent" => $saltMonovalent,
+      "salt_divalent" => $saltDivalent,
     });
 
   print "Enumerating middle forward primers\n";
@@ -636,6 +695,10 @@ $| = 0;
       "max_tm" => $innerPrimerMaxTM,
       "max_poly_bases" => $maxPolyBases,
       "most_to_return" => $maxEnumeratedPrimers,
+      "dna_conc" => $dnaConc,
+      "dntp_conc" => $dntpConc,
+      "salt_monovalent" => $saltMonovalent,
+      "salt_divalent" => $saltDivalent,
     });
 
   print "Enumerating inner forward primers\n";
@@ -1755,7 +1818,7 @@ $| = 0;
     $possibleSignatures_r = reduceSignaturesByOverlap(
       {
 	"signatures" => $possibleSignatures_r,
-	"max_overlap_percent" => 0,
+	"max_overlap_percent" => $maxSigOverlapPercent,
       });
 
     # Stop iterating over plans if we have enough signatures to be done with
@@ -1789,7 +1852,7 @@ $| = 0;
 
   # Write the output fasta
   #TODO: watch for stompping?
-  open(OUTANSWER, "> $outputFileName") || 
+  open(OUTANSWER, "> $outputFileName") ||
     confess("file error - failed to open output file \"$outputFileName\" " .
       "for writing: $!");
 
@@ -1807,7 +1870,7 @@ $| = 0;
     my $locationSummary = $signature->getLocationSummary();
     #my $penaltySummary = $signature->getPenaltySummary(); 
     #my $tmSummary = $signature->getTMSummary();
-     
+
     #print OUTANSWER ">$signatureName F3 (penatly: $penalty) (locations: $locationSummary) " .
     #  "(sub-penalties: $penaltySummary) (tms: $tmSummary)\n"; 
     # TODO: update the sig reader to load this data too! (need something more flexible!)
@@ -1816,11 +1879,11 @@ $| = 0;
     my $penaltyNotes = $signature->getTag("penalty_notes");
     print OUTANSWER ">$signatureName F3 (penalty: $penalty) $penaltyNotes (locations: $locationSummary)\n";
     print OUTANSWER $signature->getF3() . "\n";
-    print OUTANSWER ">$signatureName B3\n"; 
+    print OUTANSWER ">$signatureName B3\n";
     print OUTANSWER $signature->getB3() . "\n";
-    print OUTANSWER ">$signatureName FIP\n"; 
+    print OUTANSWER ">$signatureName FIP\n";
     print OUTANSWER $signature->getFIP() . "\n";
-    print OUTANSWER ">$signatureName BIP\n"; 
+    print OUTANSWER ">$signatureName BIP\n";
     print OUTANSWER $signature->getBIP() . "\n";
     if($includeLoopPrimers == $TRUE)
     {
@@ -1832,7 +1895,7 @@ $| = 0;
       print OUTANSWER ">$signatureName BLOOP\n";
       print OUTANSWER $bloopSequence . "\n";
     }
-      
+
     # Return the linker back to its original state
     $signature->linker($originalLinker);
   }
@@ -2466,7 +2529,7 @@ sub reduceSignaturesByOverlap
   my ($paramHash_r) = @_;
 
   my $signatures_r = optionRequired($paramHash_r, "signatures");
-  my $maxOverlapPercent = optionWithDefault($paramHash_r, "max_overlap_percent", 0);
+  my $maxOverlapPercent = optionWithDefault($paramHash_r, "max_overlap_percent", 99);
   my $sortByScore = optionWithDefault($paramHash_r, "sort_by_score", $FALSE);
   my $sortByLocation = optionWithDefault($paramHash_r, "sort_by_location", $FALSE);
   if($sortByScore == $FALSE && $sortByLocation == $FALSE)
@@ -2480,7 +2543,7 @@ sub reduceSignaturesByOverlap
 
   my $signatureCount= scalar(@{$signatures_r});
   #print "Starting with $primerCount primers\n";
-  print " Reducing signatures $signatureCount->";
+  print " Reducing signatures ha $signatureCount->";
   
   # Short-cut if we're at 100% overlap
   if($maxOverlapPercent == 100)
@@ -2489,7 +2552,7 @@ sub reduceSignaturesByOverlap
     foreach my $signature(@{$signatures_r})
     {
       push(@signatureList, $signature);
-    }
+  }
 
     # Go ahead and sort primers by location for their return :)
     @signatureList = 
